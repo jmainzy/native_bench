@@ -4,11 +4,13 @@ channels:
   - conda-forge/label/kenlm_dev
   - defaults
 dependencies:
+  - _openmp_mutex=4.5=7_kmp_llvm
   - annotated-types=0.7.0=pyhd8ed1ab_1
   - anyio=4.12.0=pyhcf101f3_0
   - bzip2=1.0.8=hd037594_8
   - ca-certificates=2026.1.4=hbd8a1cb_0
   - certifi=2026.1.4=pyhd8ed1ab_0
+  - click=8.3.1=pyh8f84b5b_1
   - colorama=0.4.6=pyhd8ed1ab_1
   - distro=1.9.0=pyhd8ed1ab_1
   - exceptiongroup=1.3.1=pyhd8ed1ab_0
@@ -20,21 +22,39 @@ dependencies:
   - hyperframe=6.1.0=pyhd8ed1ab_0
   - idna=3.11=pyhd8ed1ab_0
   - jiter=0.12.0=py310h53169e7_1
+  - joblib=1.5.3=pyhd8ed1ab_0
+  - libblas=3.11.0=5_h51639a9_openblas
+  - libcblas=3.11.0=5_hb0561ab_openblas
+  - libcxx=21.1.8=hf598326_0
   - libexpat=2.7.3=haf25636_0
   - libffi=3.5.2=he5f378a_0
+  - libgcc=15.2.0=hcbb3090_16
+  - libgfortran=15.2.0=h07b0088_16
+  - libgfortran5=15.2.0=hdae7583_16
+  - liblapack=3.11.0=5_hd9741b5_openblas
   - liblzma=5.8.1=h39f12f2_2
+  - libopenblas=0.3.30=openmp_ha158390_3
   - libsqlite=3.51.1=h1b79a29_1
   - libzlib=1.3.1=h8359307_2
+  - llvm-openmp=21.1.8=h4a912ad_0
   - ncurses=6.5=h5e97a16_3
+  - nltk=3.9.2=pyhcf101f3_1
+  - numpy=2.2.6=py310h4d83441_0
   - openai=2.14.0=pyhd8ed1ab_0
   - openssl=3.6.0=h5503f6c_0
+  - pandas=2.3.3=py310h25f4b65_1
   - pip=25.3=pyh8b19718_0
   - pydantic=2.12.5=pyhcf101f3_1
   - pydantic-core=2.41.5=py310hf3301a5_1
   - python=3.10.19=hcd7f573_2_cpython
+  - python-dateutil=2.9.0.post0=pyhe01879c_2
+  - python-tzdata=2025.3=pyhd8ed1ab_0
   - python_abi=3.10=8_cp310
+  - pytz=2025.2=pyhd8ed1ab_0
   - readline=8.3=h46df422_0
+  - regex=2025.11.3=py310hfe3a0ae_1
   - setuptools=80.9.0=pyhff2d567_0
+  - six=1.17.0=pyhe01879c_1
   - sniffio=1.3.1=pyhd8ed1ab_2
   - tk=8.6.13=h892fb3f_3
   - tqdm=4.67.1=pyhd8ed1ab_1
