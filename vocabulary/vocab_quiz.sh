@@ -8,4 +8,4 @@ source ~/miniconda3/etc/profile.d/conda.sh
 conda activate nativebench
 
 # vocabulary quiz
-python vocab_quiz.py Muscogee --model gpt-4.1-2025-04-14
+python vocab_quiz.py Muscogee
