@@ -4,16 +4,28 @@ from openai import OpenAI
 import argparse
 import pandas as pd
 import nltk.translate.chrf_score as chrf
+import anthropic
 
 DEFAULT_MODEL = "gpt-4o-mini-2024-07-18"
 
 def initialize_client(model_name):
     if model_name.startswith("gemini"):
+        print("Using Gemini model, initializing client with Gemini API key.")
         client = OpenAI(
             api_key=os.getenv("GEMINI_API_KEY"),
             base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
         )
+    elif model_name.startswith("deepseek"):
+        print("Using DeepSeek model, initializing client with DeepSeek API key.")
+        client = OpenAI(
+            api_key=os.environ.get('DEEPSEEK_API_KEY'), 
+            base_url="https://api.deepseek.com"
+        )
+    elif model_name.startswith("claude"):
+        print("Using Claude model, initializing client with Claude API key.")
+        client = anthropic.Client(api_key=os.getenv("ANTHROPIC_API_KEY"))
     else:
+        print("Using OpenAI model, initializing client with OpenAI API key.")
         OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
         client = OpenAI(api_key=OPENAI_API_KEY)
 
@@ -33,20 +45,34 @@ def get_phrase_list(filename):
 
 def quiz(source_language, target_language, phrase, client, model):
     print(f"Translating from {source_language} to {target_language}: {phrase}")
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
-            {
-                "role": "developer",
-                "content": f"You are a helpful assistant that translates phrases from {source_language} to {target_language}."
-            },
-            {
-                "role": "user",
-                "content": f"What is the {target_language} translation for '{phrase}'? Respond with only the translated phrase."
-            }
-        ],
-    )
-    return response.choices[0].message.content.strip()
+    if model.startswith("claude"):
+        response = client.messages.create(
+            model=model,
+            max_tokens=1000,
+            system=f"You are a helpful assistant that translates phrases from {source_language} to {target_language}.",
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"What is the {target_language} translation for '{phrase}'? Respond with only the translated phrase.",
+                }
+            ],
+        )
+        return response.content[0].text.strip()
+    else:
+        response = client.chat.completions.create(
+            model=model,
+            messages=[
+                {
+                    "role": "system",
+                    "content": f"You are a helpful assistant that translates phrases from {source_language} to {target_language}."
+                },
+                {
+                    "role": "user",
+                    "content": f"What is the {target_language} translation for '{phrase}'? Respond with only the translated phrase."
+                }
+            ],
+        )
+        return response.choices[0].message.content.strip()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Vocabulary Quiz")

@@ -1,8 +1,10 @@
 import os
 import datetime
-import anthropic
 from openai import OpenAI
 import argparse
+import pandas as pd
+import nltk.translate.chrf_score as chrf
+import anthropic
 
 DEFAULT_MODEL = "gpt-4o-mini-2024-07-18"
 
@@ -33,30 +35,17 @@ def initialize_client(model_name):
 
     return client
 
-def get_questions(filename):
-    question_list = []
-    with open(filename, "r") as file:
-        for line in file:
-            question = line.split("\t")[0]
-            options = []
-            for option in line.strip().split("\t")[1:]:
-                options.append(option)
-            question_list.append((question, options))
-    return question_list
-
-def quiz(question, options, client, model):
-    format_options = ""
-    for idx, option in enumerate(options):
-        format_options += f"{chr(65 + idx)}. {option} "
+def prompt(target_language, prompt, client, model):
+    print(f"Prompting for {target_language}: {prompt}")
     if model.startswith("claude"):
         response = client.messages.create(
             model=model,
             max_tokens=1000,
-            system=f"You are a helpful assistant that answers cultural questions about North American Indigenous peoples. You will respond to multiple choice questions with only the letter of the correct answer.",
+            system=f"You are a knowledgable assistant that can respond in {target_language}.",
             messages=[
                 {
                     "role": "user",
-                    "content": f"{question} Here are the options: {format_options} Respond with only the letter of the correct answer."
+                    "content": f"'{prompt}'",
                 }
             ],
         )
@@ -67,34 +56,38 @@ def quiz(question, options, client, model):
             messages=[
                 {
                     "role": "system",
-                    "content": f"You are a helpful assistant that answers cultural questions about North American Indigenous peoples. You will respond to multiple choice questions with only the letter of the correct answer."
+                    "content": f"You are a knowledgable assistant that can respond in {target_language}."
                 },
                 {
                     "role": "user",
-                    "content": f"{question} Here are the options: {format_options} Respond with only the letter of the correct answer."
+                    "content": f"'{prompt}'",
                 }
             ],
         )
         return response.choices[0].message.content.strip()
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Culture Quiz")
+    parser = argparse.ArgumentParser(description="Vocabulary Quiz")
+    parser.add_argument("prompt", type=str, help="The prompt for the story")
+    parser.add_argument("--lang", type=str, default="Muscogee", help="The target language for the story")
     parser.add_argument("--model", type=str, default=DEFAULT_MODEL, help="Model name to use for the quiz")
-    parser.add_argument("--question_file", type=str, default="./culture_questions.tsv", help="TSV file with quiz questions")
     args = parser.parse_args()
     model_name = args.model
-    question_file = args.question_file
 
     # init
     client = initialize_client(model_name)
 
-    # read word list from file
-    question_list = get_questions(question_file)
-
     current_date = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-    output_file = f"out_{model_name}_{current_date}.tsv"
-    with open(output_file, "w") as result_file:
-        for question, options in question_list:
-            response_word = quiz(question, options, client, model_name)
-            result_file.write(f"{question}\t{response_word}\n")
-            print(f"{question} -> {response_word}")
+    output_file = f"out_{args.lang}_{model_name}_{current_date}.tsv"
+
+    # record prompt to output file
+    with open(output_file, "w") as f:
+        f.write(f"Prompt:\t{args.prompt}\n\n")
+        f.write(f"Target Language:\t{args.lang}\n\n")
+        f.write(f"Model:\t{model_name}\n\n")
+
+    # get response
+    response = prompt(args.lang, args.prompt, client, model_name)
+    # record response to output file
+    with open(output_file, "a") as f:
+        f.write(f"Response:\t{response}\n")
