@@ -31,11 +31,13 @@ conda activate nativebench
 # python vocab_quiz.py Mvskoke --model gemini-3.1-pro-preview
 # python vocab_quiz.py Choctaw --model gemini-3.1-pro-preview
 # python vocab_quiz.py Hawaiian --model deepseek-reasoner
-python vocab_quiz.py Muscogee --model deepseek-chat
-python vocab_quiz.py Choctaw --model deepseek-chat
-python vocab_quiz.py Choctaw --model deepseek-reasoner
-python vocab_quiz.py Choctaw --model claude-opus-4-6
-python vocab_quiz.py Muscogee --model claude-opus-4-6
-python vocab_quiz.py Cheyenne --model claude-opus-4-6
-python vocab_quiz.py Cherokee --model claude-opus-4-6
-python vocab_quiz.py Hawaiian --model claude-opus-4-6
+# python vocab_quiz.py Muscogee --model deepseek-chat
+# python vocab_quiz.py Choctaw --model deepseek-chat
+# python vocab_quiz.py Choctaw --model deepseek-reasoner
+# python vocab_quiz.py Choctaw --model claude-opus-4-6
+# python vocab_quiz.py Muscogee --model claude-opus-4-6
+# python vocab_quiz.py Cheyenne --model claude-opus-4-6
+# python vocab_quiz.py Cherokee --model claude-opus-4-6
+# python vocab_quiz.py Hawaiian --model claude-opus-4-6
+# python vocab_quiz.py Hawaiian --model gpt-5.2-2025-12-11
+python vocab_quiz.py Cherokee --model deepseek-reasoner

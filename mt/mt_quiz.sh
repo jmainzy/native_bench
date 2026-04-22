@@ -18,5 +18,8 @@ conda activate nativebench
 # python mt_quiz.py --phrase_list_file ./phrase_list.tsv --model deepseek-reasoner
 # python mt_quiz.py --phrase_list_file ./phrase_list.tsv --model claude-opus-4-6
 # python mt_quiz.py --phrase_list_file ./phrase_list.tsv --model gemini-3.1-pro-preview
-python mt_quiz.py --phrase_list_file ./phrase_list.tsv --model gpt-4.1-2025-04-14
-python mt_quiz.py --phrase_list_file ./mus-chw-list.tsv --model gpt-5.2-2025-12-11
+# python mt_quiz.py --phrase_list_file ./phrase_list.tsv --model gpt-4.1-2025-04-14
+# python mt_quiz.py --phrase_list_file ./mus-chw-list.tsv --model gpt-5.2-2025-12-11
+# python mt_quiz.py --phrase_list_file ./phrase_list.tsv --model claude-opus-4-6
+# python mt_quiz.py --phrase_list_file ./phrase_list.tsv --model gemini-3.1-pro-preview
+python mt_quiz.py --phrase_list_file ./phrase_list.tsv --model deepseek-reasoner

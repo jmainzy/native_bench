@@ -9,6 +9,7 @@ conda activate nativebench
 
 # culture quiz
 # python culture_quiz.py --model gpt-4.1-2025-04-14
-# python culture_quiz.py --model gemini-3.1-pro-preview
+python culture_quiz.py --model gemini-3.1-pro-preview
+# python culture_quiz.py --model claude-opus-4-6
+python culture_quiz.py --model gpt-5.2-2025-12-11
 python culture_quiz.py --model deepseek-reasoner
-python culture_quiz.py --model claude-opus-4-6

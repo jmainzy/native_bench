@@ -3,7 +3,7 @@ import datetime
 from openai import OpenAI
 import argparse
 import pandas as pd
-import nltk.translate.chrf_score as chrf
+import sacrebleu
 import anthropic
 
 DEFAULT_MODEL = "gpt-4o-mini-2024-07-18"
@@ -53,7 +53,7 @@ def quiz(source_language, target_language, phrase, client, model):
             messages=[
                 {
                     "role": "user",
-                    "content": f"What is the {target_language} translation for '{phrase}'? Respond with only the translated phrase.",
+                    "content": f"What is the {target_language} translation for '{phrase}'? Respond with only the translated phrase, in the {target_language} alphabet. Do not reconsider. Only give one answer.",
                 }
             ],
         )
@@ -68,7 +68,7 @@ def quiz(source_language, target_language, phrase, client, model):
                 },
                 {
                     "role": "user",
-                    "content": f"What is the {target_language} translation for '{phrase}'? Respond with only the translated phrase."
+                    "content": f"What is the {target_language} translation for '{phrase}'? Respond with only the translated phrase, in the {target_language} alphabet."
                 }
             ],
         )
@@ -108,9 +108,9 @@ if __name__ == "__main__":
     # write results
     df = pd.DataFrame(phrase_list, columns=["Language", "Target Phrase", "Source Phrase"])
     df["EN->Target"] = en_target_responses
-     # calculate chrf score
-    df["CHRF_target"] = df.apply(lambda row: chrf.sentence_chrf(row["Target Phrase"], row["EN->Target"]), axis=1)
+    chrf = sacrebleu.CHRF(word_order=2, beta=1) 
+    df["CHRF_target"] = df.apply(lambda row: chrf.sentence_score(row["EN->Target"], [row["Target Phrase"]]).score / 100, axis=1)
     df["Target->EN"] = target_en_responses
-    df["CHRF_en"] = df.apply(lambda row: chrf.sentence_chrf(row["Source Phrase"], row["Target->EN"]), axis=1)
+    df["CHRF_en"] = df.apply(lambda row: chrf.sentence_score(row["Source Phrase"], [row["Target->EN"]]).score / 100, axis=1)
 
     df.to_csv(output_file, sep="\t", index=False)

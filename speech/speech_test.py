@@ -103,7 +103,8 @@ def asr(target_language, prompt, client, model) -> str:
     else:
         audio_file= open(prompt, "rb")
         response = client.audio.transcriptions.create(
-            model="gpt-4o-transcribe", 
+            model=model, 
+            prompt="Transcribe this audio clip in " + target_language + " using the correct orthography and diacritics.",
             file=audio_file
         )
         return response.text

@@ -73,7 +73,7 @@ def quiz(english_word, client, model, response_language):
                 },
                 {
                     "role": "user",
-                    "content": f"What is the {response_language} word for '{english_word}'? Respond with only the translated word."
+                    "content": f"What is the {response_language} word for '{english_word}'? Respond with only the translated word, in the {response_language} alphabet."
                 }
             ],
         )
