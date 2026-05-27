@@ -13,7 +13,7 @@ def read_file(predictions_file):
 def calculate_chrf(data):
     chrf_target = []
     chrf_en = []
-    chrf = sacrebleu.CHRF(word_order=2, beta=1) 
+    chrf = sacrebleu.CHRF(word_order=2, beta=2) 
     for index, row in data.iterrows():
         chrf_target.append(chrf.sentence_score(row["EN->Target"], [row["Target Phrase"]]).score / 100)
         chrf_en.append(chrf.sentence_score(row["Target->EN"], [row["Source Phrase"]]).score / 100)
@@ -33,6 +33,6 @@ if __name__ == "__main__":
 
     # get filename
     filename = os.path.basename(predictions_file)
-    output_file = filename.replace(".tsv", "_chrf_scores.tsv")
+    output_file = filename.replace(".tsv", "_chrf2_scores.tsv")
     # save results to tsv file
     df.to_csv(output_file, sep="\t", index=False)

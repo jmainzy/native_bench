@@ -4,11 +4,27 @@ import pandas as pd
 import jiwer
 import os
 
+transformationWord = jiwer.Compose([
+    jiwer.ToLowerCase(),
+    jiwer.RemovePunctuation(),
+    jiwer.RemoveMultipleSpaces(),
+    jiwer.Strip(),
+    jiwer.ReduceToListOfListOfWords(),
+])
+
+transformationChar = jiwer.Compose([
+    jiwer.ToLowerCase(),
+    jiwer.RemovePunctuation(),
+    jiwer.RemoveMultipleSpaces(),
+    jiwer.Strip(),
+    jiwer.ReduceToListOfListOfChars(),
+])
 
 def read_file(predictions_file):
     df = pd.read_csv(predictions_file, sep="\t")
     # print column names
     print(df.columns)
+    print(df)
     return df
 
 def calculate_eval(data):
@@ -18,8 +34,10 @@ def calculate_eval(data):
         reference = row["Transcription"]
         preds = row["Predictions"]
         # calculate CER and WER here
-        cer.append(jiwer.cer(reference, preds))
-        wer.append(jiwer.wer(reference, preds))
+        print(f"Reference: {reference}")
+        print(f"Prediction: {preds}")
+        cer.append(jiwer.cer(reference, preds, reference_transform=transformationChar, hypothesis_transform=transformationChar))
+        wer.append(jiwer.wer(reference, preds, reference_transform=transformationWord, hypothesis_transform=transformationWord))
 
     data["CER"] = cer
     data["WER"] = wer
